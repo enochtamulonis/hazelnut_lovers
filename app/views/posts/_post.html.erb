@@ -1,0 +1,27 @@
+<%= turbo_frame_tag dom_id(post) do %>
+  <div class="w-full h-52 flex flex-col justify-between p-4 shadow">
+    <h2 class="text-xl"> <%= post.title %> </h2>
+    <% if current_lover %>
+      <div class="flex w-48 justify-between">
+        <% if !post.is_hazelnutted_by(current_lover) %>
+          <%= form_with model: [post, post.hazelnuts.build], html: {class: "flex text-lg"} do |f| %>
+            <%= image_submit_tag("hazelnuts.svg", :class => "h-10 w-10 mr-4") %> <p> <%= post.hazelnuts_count %> </p>
+          <% end %>
+        <% else %>
+          <%= button_to [post, post.hazelnuts.find_by_lover_id(current_lover)], :method => :delete, :class => "bg-transparent text-lg flex" do %>
+            <%= image_tag("hazelnuts.svg", :class => "h-10 w-10 mr-4") %> <p class="text-purple-600"> <%= post.hazelnuts_count %>
+          <% end %>
+        <% end %>
+        <% if !post.is_propagated_by(current_lover) %>
+          <%= form_with model: [post, post.propagations.build], html: {class: "flex text-lg"} do |f| %>
+            <%= image_submit_tag("propagations.svg", :class => "h-10 w-10 mr-4") %> <p> <%= post.propagations_count %> </p>
+          <% end %>
+        <% else %>
+          <%= button_to [post, post.propagations.find_by_lover_id(current_lover)], :method => :delete, :class => "bg-transparent text-lg flex" do %>
+            <%= image_tag("propagations.svg", :class => "h-10 w-10 mr-4") %> <p class="text-purple-600"> <%= post.propagations_count %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
